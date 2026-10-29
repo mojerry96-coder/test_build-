@@ -1,0 +1,31 @@
+const fs=require('node:fs');const vm=require('node:vm');const assert=require('node:assert/strict');const path=require('node:path');
+const c={};c.window=c;vm.createContext(c);vm.runInContext(fs.readFileSync(path.join(__dirname,'../src/math.js'),'utf8'),c);c.GL=c.window.GL;
+for(const f of ['pages/line-lab.js','pages/two-point.js','pages/advanced.js'])vm.runInContext('GL.pages=GL.pages||{};'+fs.readFileSync(path.join(__dirname,'../src',f),'utf8'),c);
+const M=c.GL.math;
+assert.equal(M.parse('−3/2'),-1.5);assert.equal(M.parse('1.5'),1.5);assert.equal(M.parse('1 / 0'),null);assert.equal(M.parse(''),null);assert.equal(M.parse('3 cats'),null);assert.equal(M.parse('<img>'),null);
+assert.equal(M.equation(0,0),'y = 0');assert.equal(M.equation(1,0),'y = x');assert.equal(M.equation(-1,2),'y = −x + 2');assert.equal(M.equation(.5,1),'y = 1/2x + 1');
+assert.equal(M.gradient({x:-3,y:-1},{x:1,y:3}),1);assert.equal(M.gradient({x:1,y:2},{x:1,y:7}),null);assert.equal(M.intercept({x:-3,y:-1},{x:1,y:3}),2);assert.equal(M.fraction(-1.5),'-3/2');
+const bm=c.GL.beginnerMissions;
+[{m:1,c:0},{m:-1,c:0},{m:0,c:0},{m:0,c:3},{m:2,c:-4},{m:.5,c:1},{m:-3,c:0}].forEach((s,i)=>assert.equal(bm[i][2](s),true,'Beginner mission '+i));assert.equal(bm[6][2]({m:-2,c:0}),false);
+const im=c.GL.intermediateMissions;
+[{a:{x:0,y:0},b:{x:1,y:2}},{a:{x:0,y:0},b:{x:1,y:-1}},{a:{x:0,y:0},b:{x:2,y:1}},{pairs:['-1,1','0,1','1,2']},{a:{x:0,y:2},b:{x:1,y:-1}},{a:{x:1,y:1},b:{x:4,y:3}}].forEach((s,i)=>assert.equal(im[i][2](s),true,'Intermediate mission '+i));assert.equal(im[5][2]({a:{x:0,y:0},b:{x:3,y:2}}),false);assert.equal(im[0][2]({a:{x:0,y:0},b:{x:0,y:2}}),false);
+const D=c.GL.detective,grads=[1,2,3,1/2,3/2,1/3,2/3];
+let seed=7;const rng=()=>(seed=(seed*16807)%2147483647)/2147483647;const onLine=(ch,p)=>M.close(ch.m*p.x+ch.c,p.y),isInt=n=>Number.isInteger(n);
+for(let i=0;i<500;i++){
+ const r=D.generate('read',rng);assert.ok(grads.some(g=>M.close(Math.abs(r.m),g)));assert.ok(isInt(r.c)&&r.c>=-4&&r.c<=4);assert.ok(onLine(r,r.through)&&isInt(r.through.y)&&r.through.x!==0&&Math.abs(r.through.y)<=8,'read passes through a second on-screen grid point');
+ const t=D.generate('two',rng);assert.ok(grads.some(g=>M.close(Math.abs(t.m),g)));assert.ok(isInt(t.c)&&t.c>=-5&&t.c<=5);assert.ok([t.a,t.b].every(p=>isInt(p.x)&&isInt(p.y)&&onLine(t,p)));assert.notEqual(t.a.x,t.b.x);
+ const k=D.generate('missing',rng);assert.ok(isInt(k.m)&&Math.abs(k.m)>=1&&Math.abs(k.m)<=4&&k.c>=-6&&k.c<=6&&k.x>=-5&&k.x<=5&&k.x!==0&&['k','y'].includes(k.find)&&onLine(k,{x:k.x,y:k.y}));
+ const g=D.generate('targets',rng);assert.ok(isInt(g.m*2)&&Math.abs(g.m)>=.5&&Math.abs(g.m)<=3&&g.c>=-4&&g.c<=4);assert.ok([g.t1,g.t2].every(p=>[-4,-2,2,4].includes(p.x)&&Math.abs(p.y)<=8&&onLine(g,p))&&g.t1.x!==g.t2.x);
+ assert.ok(['read','two','missing','targets'].includes(D.generate('mixed',rng).type));
+ const again=D.generate('read',rng,r);assert.notEqual(JSON.stringify(again),JSON.stringify(r),'a similar example uses different numbers');
+}
+const two={type:'two',m:-1.5,c:2,a:{x:4,y:-4},b:{x:-4,y:8}};
+assert.equal(D.check(two,{m:'−3/2',c:'2'}).correct,true);assert.equal(D.check(two,{m:'-1.5',c:'2.0'}).correct,true);
+assert.equal(D.check(two,{m:'-3/2',c:'1'}).comment,'Your gradient is right, but c is not.');assert.equal(D.check(two,{m:'3/2',c:'2'}).comment,'Check the sign of your gradient.');assert.equal(D.check(two,{m:'2',c:'2'}).comment,'Your c is right, but the gradient is not.');
+assert.equal(D.check({type:'read',m:1/3,c:0,through:{x:3,y:1}},{m:'0.33',c:'0'}).correct,true);assert.equal(D.check({type:'read',m:1/3,c:0,through:{x:3,y:1}},{m:'0.3',c:'0'}).correct,false);
+assert.equal(D.check({type:'missing',m:2,c:5,find:'k',x:-4,y:-3},{v:'-4'}).correct,true);assert.equal(D.check({type:'missing',m:2,c:5,find:'y',x:-4,y:-3},{v:'-2'}).correct,false);
+const tg={type:'targets',m:.5,c:1,t1:{x:-2,y:0},t2:{x:4,y:3}};assert.equal(D.check(tg,{m:.5,c:1}).correct,true);assert.equal(D.check(tg,{m:0,c:0}).comment,'Your line passes through 1 of the 2 dots.');
+const z={points:0,solved:0,streak:0,best:0};let sc=D.award(z,1,true);assert.deepEqual([sc.points,sc.solved,sc.streak,sc.best,sc.earned],[3,1,1,1,3]);sc=D.award(sc,1,true);assert.deepEqual([sc.points,sc.streak,sc.best],[6,2,2]);
+sc=D.award(sc,2,true);assert.deepEqual([sc.points,sc.solved,sc.streak,sc.best],[8,3,0,2]);sc=D.award(sc,3,true);assert.equal(sc.points,9);sc=D.award(sc,3,false);assert.deepEqual([sc.points,sc.solved,sc.streak,sc.best,sc.earned],[9,4,0,2,0]);
+assert.ok(D.working(two).includes('c = −4 − (−6) = <strong>2</strong>'),'sample working from the brief');
+console.log('Math, mission and detective checks passed.');

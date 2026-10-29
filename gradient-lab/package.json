@@ -1,0 +1,13 @@
+{
+  "name": "gradient-lab",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Offline HTML, CSS and JavaScript Gradient Lab: start screen and three levels",
+  "scripts": {
+    "test": "node tests/math.test.cjs",
+    "test:browser": "node tests/browser.test.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}
