@@ -1,0 +1,10 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="SpeakerHigh">
+<g id="Vector">
+</g>
+<path id="Vector_2" d="M5 10.5H2C1.86739 10.5 1.74021 10.4473 1.64645 10.3536C1.55268 10.2598 1.5 10.1326 1.5 10V6C1.5 5.86739 1.55268 5.74021 1.64645 5.64645C1.74021 5.55268 1.86739 5.5 2 5.5H5L9.5 2V14L5 10.5Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#667085"/>
+<path id="Vector_3" d="M5 5.5V10.5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#667085"/>
+<path id="Vector_4" d="M12 6.67812C12.3217 7.04335 12.4991 7.51332 12.4991 8C12.4991 8.48668 12.3217 8.95665 12 9.32187" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#667085"/>
+<path id="Vector_5" d="M13.8544 5C14.5923 5.82503 15.0003 6.8931 15.0003 8C15.0003 9.1069 14.5923 10.175 13.8544 11" stroke-linecap="round" stroke-linejoin="round" stroke="#0A3150"/>
+</g>
+</svg>

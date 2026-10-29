@@ -1,0 +1,1 @@
+ALTER TABLE public.student_prefs ADD COLUMN IF NOT EXISTS low_data boolean;

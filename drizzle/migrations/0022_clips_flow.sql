@@ -1,0 +1,1 @@
+alter table public.clips add column if not exists flow jsonb not null default '[]'::jsonb;

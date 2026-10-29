@@ -1,0 +1,1 @@
+alter table public.clips add column if not exists title text, add column if not exists duration_s integer, add column if not exists segments jsonb not null default '[]'::jsonb, add column if not exists captions jsonb not null default '[]'::jsonb;

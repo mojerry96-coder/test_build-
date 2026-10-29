@@ -1,0 +1,2 @@
+ALTER TABLE public.evidence DROP CONSTRAINT evidence_status_check;
+ALTER TABLE public.evidence ADD CONSTRAINT evidence_status_check CHECK (status IS NULL OR status = ANY (ARRAY['shown','repaired','not_repaired','quiz']));

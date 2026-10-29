@@ -1,0 +1,1 @@
+create unique index if not exists topics_slug_path_unique on public.topics (subject, chapter_slug, quest_slug, topic_slug);
