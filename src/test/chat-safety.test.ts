@@ -19,7 +19,7 @@ describe("every starter-pack script renders in the chat without raw data", () =>
   it("found scripts to check", () => expect(scripts.length).toBeGreaterThan(20));
   for (const { where, script } of scripts) {
     // The engine fills placeholders before anything is shown, so check the filled words.
-    const shown = script.map((l) => ({ ...l, text: l.text.replace(/\{(student_name|first_name|count|count_words|count_skills|remaining|remaining_questions|prediction|tutor_name|tasks|skill_name|role)\}/g, "Ada") }));
+    const shown = script.map((l) => ({ ...l, text: l.text.replace(/\{(student_name|first_name|count|count_words|count_skills|remaining|remaining_questions|prediction|tutor_name|tasks|skill_name|role|choice|greeting|warmup_words|part|item|topic|n|step_question|hint|when|right|total|quest|option|subject|area|streak_words|last_words|last|topic_name|stop_n|stop_name|done_stops|prev_stop|rank|done|first_step)\}/g, "Ada") }));
     it(where, () => expect(safeChatLines(shown, FALLBACK)).toEqual(shown));
   }
 });
