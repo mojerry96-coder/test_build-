@@ -1,2 +1,0 @@
-DELETE FROM public.rules WHERE key = 'elevenlabs_voice_settings' AND topic_id IS NULL;
-INSERT INTO public.rules (key, topic_id, value, description) VALUES ('elevenlabs_voice_settings', NULL, '{"speed":0.85,"stability":0.5,"similarity_boost":0.75}'::jsonb, 'Fiti voice settings; speed below 1 = slower teaching pace (0.7-1.2).');

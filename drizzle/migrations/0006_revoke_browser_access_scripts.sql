@@ -1,1 +1,0 @@
-REVOKE ALL ON public.scripts FROM anon, authenticated;

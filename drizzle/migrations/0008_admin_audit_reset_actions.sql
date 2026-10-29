@@ -1,2 +1,0 @@
-alter table public.admin_audit drop constraint admin_audit_action_check;
-alter table public.admin_audit add constraint admin_audit_action_check check (action = any (array['setting_changed','role_granted','role_removed','test_data_reset','lesson_restarted']));

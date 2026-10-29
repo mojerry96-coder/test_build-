@@ -1,4 +1,0 @@
-# Lesson server rules
-- Practice asks: help level, allowed numbers and the result-blocking check live in `src/server/lesson/practise-help.ts` (pure, tested); the AI (`teachPractise`) only phrases the next step from her board, the approved hint and the set-up, else the approved hint rung plays; asks per problem are saved in session state `practiseAsks`. Why: Fiti teaches the problem on screen but never gives a result.
-- Map go-back: done stop → `GoBackDialog` (`path_back_*` lines) → `rewindStep` moves the open session back (`rewindTarget`/`stepsFrom`, tested), keeps evidence, logs `step_rewound`. Why: engine owns her place; records stay.
-- Rules, fallback lines and practice ids are read through `src/server/lesson/wording-cache.server.ts` (60 s per server copy, cleared on content import). Why: the lesson view made dozens of sequential reads per tap.

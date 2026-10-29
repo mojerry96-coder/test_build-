@@ -1,3 +1,0 @@
-REVOKE EXECUTE ON FUNCTION public.owns_class(uuid), public.is_class_member(uuid), public.session_in_owned_class(uuid), public.has_learning_consent(uuid), public.has_role(uuid, public.app_role), public.log_role_change(), public.handle_new_user() FROM PUBLIC, anon;
-REVOKE EXECUTE ON FUNCTION public.log_role_change(), public.handle_new_user() FROM authenticated;
-GRANT EXECUTE ON FUNCTION public.owns_class(uuid), public.is_class_member(uuid), public.session_in_owned_class(uuid), public.has_learning_consent(uuid), public.has_role(uuid, public.app_role) TO authenticated, service_role;
